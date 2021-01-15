@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System;
 
 namespace PierresTreats.Controllers
 {
@@ -98,6 +99,33 @@ namespace PierresTreats.Controllers
       }
       _db.SaveChanges();
       return RedirectToAction("Details", new{id=flavor.FlavorId});
+    }
+
+    public async Task<ActionResult> Delete(int id)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var thisFlavor = _db.Flavors
+        .Where(entry => entry.User.Id == currentUser.Id)
+        .FirstOrDefault(flavor => flavor.FlavorId == id);
+      if(thisFlavor == null)
+      {
+        return RedirectToAction("Details", new { id = id});
+      }
+      return View(thisFlavor);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    public async Task<ActionResult> DeleteConfirmed(int id)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var thisFlavor = _db.Flavors
+        .Where(entry => entry.User.Id == currentUser.Id)
+        .FirstOrDefault(flavor => flavor.FlavorId == id);
+      _db.Flavors.Remove(thisFlavor);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
     }
   }
 }
