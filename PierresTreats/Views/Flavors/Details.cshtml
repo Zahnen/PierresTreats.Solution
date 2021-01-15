@@ -1,0 +1,21 @@
+@model PierresTreats.Models.Flavor
+
+<div class="row">
+  <div class="col-sm-6">
+    <h1>Flavor Profile</h1>
+    <h3>Name: @Html.DisplayFor(model => model.Name)</h3>
+  </div>
+  <div class="col-sm-6">
+    <h1>Treats with this Flavor Profile:</h1>
+    <ul>
+      @if (@Model.Treats.Count == 0)
+      {
+        <h3>No treats match this flavor profile. Add one with the button below!</h3>
+      }
+      @foreach(var join in Model.Treats)
+      {
+        <li>@Html.ActionLink($"{@join.Treat.Name}", "Details", "Treats", new { id = join.TreatId } )</li>
+      }
+    </ul>
+  </div>
+</div>
