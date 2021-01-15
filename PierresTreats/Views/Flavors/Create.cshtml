@@ -1,0 +1,11 @@
+@model PierresTreats.Models.Flavor
+
+<h1>Add a new flavor profile to Sous Chef</h1>
+<hr>
+@using (Html.BeginForm())
+{
+  @Html.Label("Name")
+  @Html.TextBoxFor(model => model.Name)
+
+  <input type="submit" value="Add" class="btn btn-default" />
+}
