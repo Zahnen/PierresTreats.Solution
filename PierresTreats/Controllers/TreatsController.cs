@@ -25,7 +25,7 @@ namespace PierresTreats.Controllers
 
     public ActionResult Index()
     {
-      return View();
+      return View(_db.Treats.ToList());
     }
 
     public ActionResult Create()
@@ -33,6 +33,7 @@ namespace PierresTreats.Controllers
       return View();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create (Treat treat)
     {
@@ -53,6 +54,7 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
     public async Task<ActionResult> Edit(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -67,6 +69,7 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Edit(Treat treat)
     {
@@ -77,6 +80,7 @@ namespace PierresTreats.Controllers
       return RedirectToAction("Details", new{id=treat.TreatId});
     }
 
+    [Authorize]
     public async Task<ActionResult> AddFlavor(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -88,6 +92,7 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> AddFlavor(Treat treat, int FlavorId)
     {
@@ -101,6 +106,7 @@ namespace PierresTreats.Controllers
       return RedirectToAction("Details", new{id=treat.TreatId});
     }
 
+    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -115,6 +121,7 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
     [HttpPost, ActionName("Delete")]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {

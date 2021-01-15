@@ -25,7 +25,7 @@ namespace PierresTreats.Controllers
 
     public ActionResult Index()
     {
-      return View();
+      return View(_db.Flavors.ToList());
     }
 
     public ActionResult Create()
@@ -33,6 +33,7 @@ namespace PierresTreats.Controllers
       return View();
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create (Flavor flavor)
     {
@@ -52,7 +53,8 @@ namespace PierresTreats.Controllers
         .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);
     }
-
+    
+    [Authorize]
     public async Task<ActionResult> Edit(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -67,6 +69,7 @@ namespace PierresTreats.Controllers
       return View(thisFlavor);
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Edit(Flavor flavor)
     {
@@ -77,6 +80,7 @@ namespace PierresTreats.Controllers
       return RedirectToAction("Details", new{id=flavor.FlavorId});
     }
 
+    [Authorize]
     public async Task<ActionResult> AddTreat(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -84,12 +88,13 @@ namespace PierresTreats.Controllers
       var thisFlavor = _db.Flavors
         .Where(entry => entry.User.Id == currentUser.Id)
         .FirstOrDefault(flavor => flavor.FlavorId == id);
-      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
+      ViewBag.Treats = new SelectList(_db.Treats, "TreatId", "Name");
       return View(thisFlavor);
     }
 
+    [Authorize]
     [HttpPost]
-    public async Task<ActionResult> AddTag(Flavor flavor, int TreatId)
+    public async Task<ActionResult> AddTreat(Flavor flavor, int TreatId)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
       var currentUser = await _userManager.FindByIdAsync(userId);
@@ -101,6 +106,7 @@ namespace PierresTreats.Controllers
       return RedirectToAction("Details", new{id=flavor.FlavorId});
     }
 
+    [Authorize]
     public async Task<ActionResult> Delete(int id)
     {
       var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -115,6 +121,7 @@ namespace PierresTreats.Controllers
       return View(thisFlavor);
     }
 
+    [Authorize]
     [HttpPost, ActionName("Delete")]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
