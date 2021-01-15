@@ -52,5 +52,29 @@ namespace PierresTreats.Controllers
         .FirstOrDefault(treat => treat.TreatId == id);
       return View(thisTreat);
     }
+
+    public async Task<ActionResult> Edit(int id)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var thisTreat = _db.Treats
+        .Where(entry => entry.User.Id == currentUser.Id)
+        .FirstOrDefault(treat => treat.TreatId == id);
+      if(thisTreat == null)
+      {
+        return RedirectToAction("Details", new { id = id});
+      }
+      return View(thisTreat);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Edit(Treat treat)
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      _db.Entry(treat).State = EntityState.Modified;
+      _db.SaveChanges();
+      return RedirectToAction("Details", new{id=treat.TreatId});
+    }
   }
 }
