@@ -1,0 +1,13 @@
+@model PierresTreats.Models.Treat
+
+<h1>Edit @Model.Name</h1>
+<hr>
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.TreatId)
+
+  @Html.Label("Name")
+  @Html.TextBoxFor(model => model.Name)
+
+  <input type="submit" value="Save" class="btn btn-default" />
+}
