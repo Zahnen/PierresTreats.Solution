@@ -6,8 +6,9 @@
 
 @model LoginViewModel
 
-<h2>Log in with your account</h2>
-<hr />
+<h2>Log in with your account to proceed.</h2>
+<hr>
+<p>New to Sous Chef? @Html.ActionLink("Sign up here.", "Register")</p>
 @using (Html.BeginForm())
 {
     @Html.LabelFor(m=> m.Email)

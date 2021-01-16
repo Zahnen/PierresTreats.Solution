@@ -8,8 +8,11 @@
   <div class="col-sm-6">
     <h1>Flavor Profile</h1>
     <h3>Name: @Html.DisplayFor(model => model.Name)</h3>
+    @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
+    {
     <p>@Html.ActionLink("Edit Flavor", "Edit", new { id = Model.FlavorId })</p>
     <p>@Html.ActionLink("Delete Flavor", "Delete", new { id = Model.FlavorId })</p>
+    }
   </div>
   <div class="col-sm-6">
     <h1>Treats with this Flavor Profile:</h1>
@@ -23,6 +26,9 @@
         <li>@Html.ActionLink($"{@join.Treat.Name}", "Details", "Treats", new { id = join.TreatId } )</li>
       }
     </ul>
+    @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
+    {
     <p>@Html.ActionLink("Add a treat", "AddTreat", new { id = Model.FlavorId })</p>
+    }
   </div>
 </div>
