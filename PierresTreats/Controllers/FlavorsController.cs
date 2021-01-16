@@ -50,7 +50,10 @@ namespace PierresTreats.Controllers
       var thisFlavor = _db.Flavors
         .Include(flavor => flavor.Treats)
         .ThenInclude(join => join.Treat)
+        .Include(flavor => flavor.User)
         .FirstOrDefault(flavor => flavor.FlavorId == id);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ViewBag.IsCurrentUser = userId != null ? userId == thisFlavor.User.Id : false;
       return View(thisFlavor);
     }
     
@@ -85,7 +88,11 @@ namespace PierresTreats.Controllers
       var thisFlavor = _db.Flavors
         .Where(entry => entry.User.Id == currentUser.Id)
         .FirstOrDefault(flavor => flavor.FlavorId == id);
-      ViewBag.Treats = new SelectList(_db.Treats, "TreatId", "Name");
+      if(thisFlavor == null)
+      {
+        return RedirectToAction("Details", new { id = id});
+      }
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View(thisFlavor);
     }
 
@@ -97,7 +104,7 @@ namespace PierresTreats.Controllers
         _db.TreatFlavor.Add(new TreatFlavor() {TreatId = TreatId, FlavorId = flavor.FlavorId});
       }
       _db.SaveChanges();
-      return RedirectToAction("Index");
+      return RedirectToAction("Details", new { id = flavor.FlavorId });
     }
 
     [Authorize]

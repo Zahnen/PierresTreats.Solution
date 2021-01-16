@@ -21,7 +21,7 @@ namespace PierresTreats.Controllers
       return View();
     }
 
-    [HttpGet("/directory/")]
+    [HttpGet("/Directory/")]
     public ActionResult Directory()
     {
       ViewBag.Treats = _db.Treats.ToList();

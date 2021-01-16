@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using System.Security.Claims;
-using System;
 
 namespace PierresTreats.Controllers
 {
@@ -50,9 +49,14 @@ namespace PierresTreats.Controllers
       var thisTreat = _db.Treats
         .Include(treat => treat.Flavors)
         .ThenInclude(join => join.Flavor)
+        .Include(treat => treat.User)
         .FirstOrDefault(treat => treat.TreatId == id);
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ViewBag.IsCurrentUser = userId != null ? userId == thisTreat.User.Id : false;
       return View(thisTreat);
     }
+
+    
 
     [Authorize]
     public async Task<ActionResult> Edit(int id)
@@ -85,7 +89,11 @@ namespace PierresTreats.Controllers
       var thisTreat = _db.Treats
         .Where(entry => entry.User.Id == currentUser.Id)
         .FirstOrDefault(treat => treat.TreatId == id);
-      ViewBag.Flavors = new SelectList(_db.Flavors, "FlavorId", "Name");
+      if(thisTreat == null)
+      {
+        return RedirectToAction("Details", new { id = id});
+      }
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
       return View(thisTreat);
     }
 
@@ -97,7 +105,7 @@ namespace PierresTreats.Controllers
         _db.TreatFlavor.Add(new TreatFlavor() {FlavorId = FlavorId, TreatId = treat.TreatId});
       }
       _db.SaveChanges();
-      return RedirectToAction("Index");
+      return RedirectToAction("Details", new { id = treat.TreatId });
     }
 
     [Authorize]
