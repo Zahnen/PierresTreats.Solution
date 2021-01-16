@@ -103,7 +103,7 @@ namespace PierresTreats.Controllers
         _db.TreatFlavor.Add(new TreatFlavor() {FlavorId = FlavorId, TreatId = treat.TreatId});
       }
       _db.SaveChanges();
-      return RedirectToAction("Details", new{id=treat.TreatId});
+      return RedirectToAction("Index");
     }
 
     [Authorize]
