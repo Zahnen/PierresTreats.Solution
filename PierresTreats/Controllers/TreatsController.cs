@@ -28,12 +28,12 @@ namespace PierresTreats.Controllers
       return View(_db.Treats.ToList());
     }
 
+    [Authorize]
     public ActionResult Create()
     {
       return View();
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create (Treat treat)
     {
@@ -69,12 +69,9 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
-    [Authorize]
     [HttpPost]
-    public async Task<ActionResult> Edit(Treat treat)
+    public ActionResult Edit(Treat treat)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
       _db.Entry(treat).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Details", new{id=treat.TreatId});
@@ -92,12 +89,9 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
-    [Authorize]
     [HttpPost]
-    public async Task<ActionResult> AddFlavor(Treat treat, int FlavorId)
+    public ActionResult AddFlavor(Treat treat, int FlavorId)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
       if (FlavorId != 0)
       {
         _db.TreatFlavor.Add(new TreatFlavor() {FlavorId = FlavorId, TreatId = treat.TreatId});
@@ -121,15 +115,10 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
-    [Authorize]
     [HttpPost, ActionName("Delete")]
-    public async Task<ActionResult> DeleteConfirmed(int id)
+    public ActionResult DeleteConfirmed(int id)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
-      var thisTreat = _db.Treats
-        .Where(entry => entry.User.Id == currentUser.Id)
-        .FirstOrDefault(treat => treat.TreatId == id);
+      var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
       _db.Treats.Remove(thisTreat);
       _db.SaveChanges();
       return RedirectToAction("Index");
