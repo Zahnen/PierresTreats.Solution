@@ -8,6 +8,8 @@
   <div class="col-sm-6">
     <h1>Baked Good:</h1>
     <h3>Name: @Html.DisplayFor(model => model.Name)</h3>
+    <p>@Html.ActionLink("Edit Treat", "Edit", new { id = Model.TreatId })</p>
+    <p>@Html.ActionLink("Delete Treat", "Delete", new { id = Model.TreatId })</p>
   </div>
   <div class="col-sm-6">
     <h1>Flavor Profiles:</h1>
@@ -21,5 +23,6 @@
         <li>@Html.ActionLink($"{@join.Flavor.Name}", "Details", "Flavors", new { id = join.FlavorId } )</li>
       }
     </ul>
+    <p>@Html.ActionLink("Add a baked good with this flavor profile", "AddFlavor", new { id = Model.TreatId })</p>
   </div>
 </div>

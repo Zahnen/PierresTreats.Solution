@@ -10,8 +10,10 @@
 @if (@Model.Count == 0)
 {
   <h3>No baked goods have been added to Sous Chef.</h3>
+  <p>@Html.ActionLink("Add a baked good", "Create")</p>
 }
 @foreach (Treat treat in Model)
 {
     <p><b>@Html.ActionLink($"{treat.Name}", "Details", new { id = treat.TreatId})</b></p>
 }
+<p>@Html.ActionLink("Add a baked good", "Create")</p>
