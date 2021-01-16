@@ -28,12 +28,12 @@ namespace PierresTreats.Controllers
       return View(_db.Flavors.ToList());
     }
 
+    [Authorize]
     public ActionResult Create()
     {
       return View();
     }
 
-    [Authorize]
     [HttpPost]
     public async Task<ActionResult> Create (Flavor flavor)
     {
@@ -69,12 +69,9 @@ namespace PierresTreats.Controllers
       return View(thisFlavor);
     }
 
-    [Authorize]
     [HttpPost]
-    public async Task<ActionResult> Edit(Flavor flavor)
+    public ActionResult Edit(Flavor flavor)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
       _db.Entry(flavor).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Details", new{id=flavor.FlavorId});
@@ -92,12 +89,9 @@ namespace PierresTreats.Controllers
       return View(thisFlavor);
     }
 
-    [Authorize]
     [HttpPost]
-    public async Task<ActionResult> AddTreat(Flavor flavor, int TreatId)
+    public ActionResult AddTreat(Flavor flavor, int TreatId)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
       if (TreatId != 0)
       {
         _db.TreatFlavor.Add(new TreatFlavor() {TreatId = TreatId, FlavorId = flavor.FlavorId});
@@ -121,15 +115,10 @@ namespace PierresTreats.Controllers
       return View(thisFlavor);
     }
 
-    [Authorize]
     [HttpPost, ActionName("Delete")]
-    public async Task<ActionResult> DeleteConfirmed(int id)
+    public ActionResult DeleteConfirmed(int id)
     {
-      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-      var currentUser = await _userManager.FindByIdAsync(userId);
-      var thisFlavor = _db.Flavors
-        .Where(entry => entry.User.Id == currentUser.Id)
-        .FirstOrDefault(flavor => flavor.FlavorId == id);
+      var thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
       _db.Flavors.Remove(thisFlavor);
       _db.SaveChanges();
       return RedirectToAction("Index");
