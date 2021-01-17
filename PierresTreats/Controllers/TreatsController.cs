@@ -56,6 +56,14 @@ namespace PierresTreats.Controllers
       return View(thisTreat);
     }
 
+    [Authorize]
+    public async Task<ActionResult> MyBakes()
+    {
+      var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      var currentUser = await _userManager.FindByIdAsync(userId);
+      var userBakes = _db.Treats.Where(entry => entry.User.Id == currentUser.Id);
+      return View(userBakes.ToList());
+    }
     
 
     [Authorize]
@@ -130,6 +138,15 @@ namespace PierresTreats.Controllers
       _db.Treats.Remove(thisTreat);
       _db.SaveChanges();
       return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    public ActionResult RemoveFlavor(int joinId)
+    {
+      var joinEntry = _db.TreatFlavor.FirstOrDefault(entry => entry.TreatFlavorId == joinId);
+      _db.TreatFlavor.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = joinEntry.TreatId});
     }
   }
 }
