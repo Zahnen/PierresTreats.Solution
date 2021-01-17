@@ -18,11 +18,23 @@ img {
   text-decoration: underline;
 }
 
-.login-link {
+a {
   color: #000000;
   text-decoration: underline;
 }
 
 .account-nav {
   text-align: right;
+}
+
+button {
+  padding: 10px;
+  margin-top: 1%;
+  margin-right: 1%;
+}
+
+button a {
+  color: #000000;
+  text-decoration: none;
+  border: #000000;
 }
