@@ -11,6 +11,9 @@ namespace PierresTreats.Models
 
     public int TreatId { get; set; }
     public string Name { get; set; }
+    public string Url { get; set; }
+    public string Modifications { get; set; }
+    public string Notes{ get; set; }
     public virtual ApplicationUser User { get; set; }
     public ICollection<TreatFlavor> Flavors { get; set; }
   }
