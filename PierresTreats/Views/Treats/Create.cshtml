@@ -11,5 +11,14 @@
   @Html.Label("Name")
   @Html.TextBoxFor(model => model.Name)
 
+  @Html.Label("Recipe Link")
+  @Html.TextBoxFor(model => model.Url)
+
+  @Html.Label("Modifications")
+  @Html.TextAreaFor(model => model.Modifications)
+
+  @Html.Label("Recipe Notes")
+  @Html.TextAreaFor(model => model.Notes)
+
   <input type="submit" value="Add" class="btn btn-default" />
 }

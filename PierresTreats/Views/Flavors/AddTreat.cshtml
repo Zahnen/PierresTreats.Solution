@@ -14,5 +14,6 @@
   @Html.Label("Select Treat")
   @Html.DropDownList("TreatId")
 
-  <input type="submit" value="Save" />
+  <input type="submit" value="Save" class="btn btn-default" />
 }
+<p>If you aren't able to find a flavor profile that fits your baked good, you can @Html.ActionLink("add a baked good here.", "Create", "Treats")</p>

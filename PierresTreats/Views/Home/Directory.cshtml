@@ -5,10 +5,10 @@
 @using PierresTreats.Models;
 <h1>Directory</h1>
 <hr>
-<p>A full list of all input bakes and their flavor profiles. To view a baked good's details, click the name of the good below. To view recipes that belong to a certain flavor profile, click that flavor profile in the list below.</p>
+<p>A full list of all baked goods and all flavor profiles in Sous Chef's database. To view a baked good's details, click the name of the good below. To view recipes that belong to a certain flavor profile, click that flavor profile in the list below.</p>
 <div class="row">
   <div class="col-sm-6">
-    <h1>Treats</h1>
+    <h1>Baked Goods</h1>
     @if (@ViewBag.Treats.Count == 0)
     {
       <h3>No baked goods have been added to Sous Chef</h3>
@@ -17,6 +17,7 @@
     {
         <p>@Html.ActionLink($"{treat.Name}", "Details", "Treats", new { id = treat.TreatId } )</p>
     }
+    <button type="button" class="btn btn-default">@Html.ActionLink("Add a baked good", "Create", "Treats")</button>
   </div>
   <div class="col-sm-6">
     <h1>Flavor Profiles</h1>
@@ -28,5 +29,6 @@
     {
         <p>@Html.ActionLink($"{flavor.Name}", "Details", "Flavors", new { id = flavor.FlavorId } )</p>
     }
+    <button type="button" class="btn btn-default">@Html.ActionLink("Add a flavor", "Create", "Flavors")</button>
   </div>
 </div>

@@ -5,30 +5,51 @@
 @model PierresTreats.Models.Treat
 
 <div class="row">
-  <div class="col-sm-6">
-    <h1>Baked Good:</h1>
-    <h3>Name: @Html.DisplayFor(model => model.Name)</h3>
+  <div class="col-sm-8">
+    <h1>@Html.DisplayFor(model => model.Name)</h1>
+    @if (Model.Url != null)
+    {
+      <h3><a href="@Model.Url">Link to Recipe</a></h3>
+    }
+    @if (Model.Notes != null)
+    {
+    <h3>Baker's Notes:</h3>
+    <p>@Model.Notes</p>
+    }
+    @if (Model.Modifications != null)
+    {
+    <h3>Modifications to Recipe:</h3>
+    <p>@Model.Modifications</p>
+    }
     @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
     {
-    <p>@Html.ActionLink("Edit Treat", "Edit", new { id = Model.TreatId })</p>
-    <p>@Html.ActionLink("Delete Treat", "Delete", new { id = Model.TreatId })</p>
+    <button type="button" class="btn btn-default">@Html.ActionLink("Edit", "Edit", new { id = Model.TreatId })</button>
+    <button type="button" class="btn btn-default">@Html.ActionLink("Delete", "Delete", new { id = Model.TreatId })</button>
     }
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
     <h1>Flavor Profiles:</h1>
     <ul>
       @if (@Model.Flavors.Count == 0)
       {
-        <h3>This baked good does not have any flavor profiles noted. Add one with the button below!</h3>
+        <h3>This baked good does not have any flavor profiles noted. If you are the entry's author, add one with the button below!</h3>
       }
       @foreach(var join in Model.Flavors)
       {
         <li>@Html.ActionLink($"{@join.Flavor.Name}", "Details", "Flavors", new { id = join.FlavorId } )</li>
+        @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
+        {
+          @using (Html.BeginForm("RemoveFlavor", "Treats"))
+          {
+            @Html.Hidden("joinId", @join.TreatFlavorId)
+            <button class="btn btn-default" type="submit">Remove</button>
+          }
+        }
       }
     </ul>
     @if (User.Identity.IsAuthenticated && ViewBag.IsCurrentUser)
     {
-    <p>@Html.ActionLink("Add a baked good with this flavor profile", "AddFlavor", new { id = Model.TreatId })</p>
+    <button type="button" class="btn btn-default">@Html.ActionLink("Add a flavor profile", "AddFlavor", new { id = Model.TreatId })</button>
     }
   </div>
 </div>
